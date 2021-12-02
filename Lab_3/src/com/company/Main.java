@@ -13,10 +13,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class Main {
 
-    public static void main(String[] args) {
-	// write your code here //////////////////////////////////////Task 1
+public class Main {
+    public static void task1() {
         List<String> myList = Arrays.asList("a1", "a2", "b1", "c2", "c1");
 
         Stream stream = myList.stream();
@@ -24,7 +23,8 @@ public class Main {
                 .filter(x-> x.toString().charAt(0) == 'c')
                 .map(x-> x.toString().toUpperCase())
                 .forEach(System.out::println);
-        /////////////////////////////////////////////////////////////Task 2
+    }
+    public static void task2(){
         System.out.println("Set the n value for array capacity: ");
         Scanner in = new Scanner(System.in);
         int n = in.nextInt();
@@ -48,18 +48,26 @@ public class Main {
 
         System.out.println(sum);
         System.out.println("Average of pair numbers :" + (float)sum/ pair.size());
+    }
+    public static String task3(String str) {
+        StringBuilder sb = new StringBuilder();
+        Arrays.stream(str.split("")).forEach(x -> {
+            if (x.matches("[h-t]")) {
+                sb.append(x.toUpperCase());
+            } else {
+                sb.append(x);
+            }
+        });
+        return sb.toString();
+    }
+    public static void main(String[] args) {
+	// write your code here //////////////////////////////////////Task 1
+        task1();
+        /////////////////////////////////////////////////////////////Task 2
+        task2();
         ///////////////////////////////////////////////////////////Task 3
+        System.out.println( task3("sjdhgfsjkavchjwagehf"));
 
-        String string = "sjdhgfsjkavchjwagehf";
-        Stream<String> stringStream = Stream.of(string);
-        String regex = "[h - t]";
-        Pattern pattern = Pattern.compile(regex,Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(string);
-       stringStream.forEach((x) -> {
-          if( matcher.find()){
-           System.out.println(x.toUpperCase());}
-       });
-        //System.out.println(string);
 
     }
 }
