@@ -12,102 +12,44 @@ public class Main {
         public static String age;
     }
 
-    public static class MyArrayList {
-        private Object[] installArr = {};
+    public static class MyArrayList<T> {
+        private final int INIT_SIZE = 16;
+        private final int CUT_RATE = 4;
+        private Object[] array = new Object[INIT_SIZE];
+        private int pointer = 0;
 
-        private Object[] elementData = null;
 
-        private int size = 0; // Скільки елементів зберігається в записі
-
-        private int installSize = 10;
-
-        public MyArrayList() {
-            this.elementData = new Object[installSize];
+        public void add(T item) {
+            if(pointer == array.length-1)
+                resize(array.length*2);
+            array[pointer++] = item;
         }
 
-        public MyArrayList(int sizeParam) throws Exception {
-            if (this.size <= 0) {
-                System.out.println("Поза межами");
-            }
-            this.elementData = new Object[sizeParam];
+
+        public T get(int index) {
+            return (T) array[index];
         }
 
-        public void add(Object obj) {
-            grow(); // Якщо необхідно збільшити ємність масива
-            elementData[size] = obj;
-            size++;
-        }
 
-        public void remove(Object obj) {
+        public void remove(int index) {
+            for (int i = index; i<pointer; i++)
+                array[i] = array[i+1];
+            array[pointer] = null;
+            pointer--;
+            if (array.length > INIT_SIZE && pointer < array.length / CUT_RATE)
+                resize(array.length/2);
 
-            for (int i = 0; i < elementData.length; i++) {
-                Object ob = elementData[i];
-                if (ob.equals(obj)) {
-                    int numMoved = size - i - 1;
-                    if (numMoved > 0) {
-                        // Сенс цієї функції
-                        // Першим elementData є початковий масив
-                        // Другий elementData - це новий масив, який тут особливий. Щоб не створювати новый масив, він використовува себе сам.
-                        // Другий параметр означає початковий індекс  елемента, який копіюється
-                        // передається четвертый параметр для покриття початкового індекса нового масива
-                        // П'ятий параметр - це довжина, скопійована з початкового масива
-                        System.arraycopy(elementData, i + 1, elementData, i,
-                                numMoved);
-                        // Розмір повинен бути зменшений на 1
-                        size--;
-                        //Ми повнні залишити останній елемент пустим
-                        // оскільки в середині відсутній один елемент, значення останнього елемента все ще не перезаписується
-                        System.out.println("Розмір дорівнює: " + size);
-                        elementData[size] = null;
-
-                    }
-                    break;
-                }
-            }
-        }
-
-        //Розширення
-        public void grow() {
-            if (size == elementData.length) {
-                Object[] elementDataNew = new Object[size * 2 + 10]; // Правило определяет себя
-                System.arraycopy(elementData, 0, elementDataNew, 0, size);
-                elementData = elementDataNew;
-                System.out.println("Розширення відбулося успішно, поточний розмір масива: " + elementData.length);
-            }
-        }
-
-        // Обход списка
-        public void whileMyArrayList() {
-
-            for (Object obj : elementData) {
-                if (obj != null) {
-                    System.out.println(obj);
-                } else {
-                    System.out.println("null");
-                }
-            }
-        }
-
-        public boolean contains(Object o) {
-
-            if (o == null) {
-                for (int i = 0; i < elementData.length; i++) {
-                    if (elementData[i] == o) {
-                        return true;
-                    }
-                }
-            } else {
-                for (int i = 0; i < elementData.length; i++) {
-                    if (elementData[i] == o) {
-                        return true;
-                    }
-                }
-            }
-            return false;
         }
 
         public int size() {
-            return size;
+            return pointer;
+        }
+
+
+        private void resize(int newLength) {
+            Object[] newArray = new Object[newLength];
+            System.arraycopy(array, 0, newArray, 0, pointer);
+            array = newArray;
         }
     }
 
@@ -315,11 +257,11 @@ public class Main {
                 list.add(i);
             }
 
-            list.whileMyArrayList();
-            System.out.println ("Вирізати елемент");
+            System.out.println ("Довжина масива, до видалення елемента " + list.size());
+            System.out.println ("Вирізали елемент");
             list.remove(7);
-            System.out.println ("Довжина масива, після видалення елемента" + list.elementData.length);
-            list.whileMyArrayList();
+            System.out.println ("Довжина масива, після видалення елемента " + list.size());
+
             ///////////////////////////////////////////////////////
             MyLinkList<String> list2 = new MyLinkList<String>();
             //System.out.println(list.isEmpty());
